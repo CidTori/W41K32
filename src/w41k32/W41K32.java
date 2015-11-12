@@ -15,7 +15,9 @@ public class W41K32 {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        
+        Bot bot = new Bot();
+        
     }
     
 }

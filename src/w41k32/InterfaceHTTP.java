@@ -10,5 +10,8 @@ package w41k32;
  * @author Cédric
  */
 public class InterfaceHTTP {
+
+    public InterfaceHTTP() {
+    }
     
 }

@@ -13,5 +13,26 @@ public class Bot {
     
     private Board board;
     private InterfaceHTTP http;
+
+    public Bot() {
+        this.board = new Board();
+        this.http = new InterfaceHTTP();
+    }
+
+    public Board getBoard() {
+        return board;
+    }
+
+    public void setBoard(Board board) {
+        this.board = board;
+    }
+
+    public InterfaceHTTP getHttp() {
+        return http;
+    }
+
+    public void setHttp(InterfaceHTTP http) {
+        this.http = http;
+    }
     
 }
