@@ -11,6 +11,10 @@ package w41k32;
  */
 public class Bot {
     
+    private String nomEquipe;
+    private String motDePasse;
+    private String idEquipe;
+    private String idPartie;
     private Board board;
     private InterfaceHTTP http;
 
@@ -34,5 +38,23 @@ public class Bot {
     public void setHttp(InterfaceHTTP http) {
         this.http = http;
     }
+    
+    private boolean ping() {
+        return this.http.ping().equals("pong");
+    }
+    
+    private void connection() {
+        this.idEquipe = this.http.player_getIdEquipe(this.nomEquipe,this.motDePasse);
+    }
+    
+    private void versus() {
+        this.idPartie = this.http.versus_next(this.idEquipe);
+    }
+    
+    private void practice(int level) {
+        this.idPartie = this.http.practice_new(level,this.idEquipe);
+    }
+    
+    
     
 }
