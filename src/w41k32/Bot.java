@@ -9,7 +9,7 @@ package w41k32;
  *
  * @author Cédric
  */
-public class IA {
+public class Bot {
     
     private Board board;
     private InterfaceHTTP http;
