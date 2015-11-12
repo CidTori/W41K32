@@ -18,9 +18,9 @@ public class Bot {
     private Board board;
     private InterfaceHTTP http;
 
-    public Bot() {
+    public Bot() throws Exception {
         this.board = new Board();
-        this.http = new InterfaceHTTP();
+        this.http = new InterfaceHTTP(true);
     }
 
     public Board getBoard() {

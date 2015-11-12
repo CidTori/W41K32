@@ -13,8 +13,9 @@ public class W41K32 {
 
     /**
      * @param args the command line arguments
+     * @throws java.lang.Exception
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         
         Bot bot = new Bot();
         
