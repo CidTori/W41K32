@@ -15,16 +15,16 @@ import java.net.*;
  */
 public class InterfaceHTTP {
 
-    String nomEquipe;
-    String motDePasse;
-    String idEquipe;
-    String idPartie;
-    int level;
+    private String nomEquipe;
+    private String motDePasse;
+    private String idEquipe;
+    private String idPartie;
+    private int level;
 
-    public InterfaceHTTP(boolean practice) throws Exception {
-        nomEquipe = "test";
-        motDePasse = "test";
-        level = 1;
+    public InterfaceHTTP(boolean practice, int level, String nomEquipe, String motDePasse) throws Exception {
+        this.nomEquipe = nomEquipe;
+        this.motDePasse = motDePasse;
+        this.level = level;
         idEquipe = getHTTP("http://www.battlearena.io/battle-ws/duel/player/getIdEquipe/" + nomEquipe + "/" + motDePasse);
         if (practice == true) {
             idPartie = getHTTP("http://www.battlearena.io/battle-ws/duel/practice/new/" + level + "/" + idEquipe);

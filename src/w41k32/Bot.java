@@ -17,6 +17,7 @@ public class Bot {
     private final String motDePasse;
     private String idEquipe;
     private String idPartie;
+    private int level;
     private Board board;
 
     public Bot(String nomEquipe, String motDePasse) throws Exception {
@@ -24,6 +25,13 @@ public class Bot {
         this.motDePasse = motDePasse;
         this.connection();
         this.board = new Board();
+<<<<<<< Updated upstream
+=======
+        this.nomEquipe = "test";
+        this.motDePasse = "test";
+        this.level = 1;
+        this.http = new InterfaceHTTP(true, level, nomEquipe, motDePasse);
+>>>>>>> Stashed changes
     }
 
     public Board getBoard() {
@@ -41,6 +49,7 @@ public class Bot {
     private void connection() throws Exception {
         this.idEquipe = InterfaceHTTP2.player_getIdEquipe(this.nomEquipe,this.motDePasse);
     }
+<<<<<<< Updated upstream
     
     private void versus() throws Exception {
         String idPartie = InterfaceHTTP2.versus_next(this.idEquipe);
@@ -49,6 +58,11 @@ public class Bot {
             idPartie = InterfaceHTTP2.versus_next(this.idEquipe);
         }
         this.idPartie = idPartie;
+=======
+    /*
+    private boolean ping() {
+        return this.http.ping().equals("pong");
+>>>>>>> Stashed changes
     }
     
     private void practice(int level) throws Exception {
@@ -74,6 +88,7 @@ public class Bot {
         }
     }
     
+<<<<<<< Updated upstream
     private void updateOpponentLastMove() throws Exception {
         String lastMove = InterfaceHTTP2.game_getLastMove(this.idPartie,this.idEquipe);
         this.board.getOpponent().setLastMove(lastMove);
@@ -99,5 +114,8 @@ public class Bot {
         String opponentName = InterfaceHTTP2.game_opponent(this.idPartie,this.idEquipe);
         this.board.getOpponent().setName(opponentName);
     }
+=======
+    */
+>>>>>>> Stashed changes
     
 }
