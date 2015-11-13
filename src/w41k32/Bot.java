@@ -13,8 +13,8 @@ import com.google.gson.Gson;
  */
 public class Bot {
     
-    private String nomEquipe;
-    private String motDePasse;
+    private final String nomEquipe;
+    private final String motDePasse;
     private String idEquipe;
     private String idPartie;
     private Board board;
