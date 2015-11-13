@@ -16,10 +16,8 @@ public class W41K32 {
      * @throws java.lang.Exception
      */
     public static void main(String[] args) throws Exception {
-        
         Bot bot = new Bot("test","test");
         bot.run();
-        
     }
     
 }
