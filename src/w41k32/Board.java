@@ -17,7 +17,7 @@ public class Board {
     private Player opponent;
 
     public Board() {
-        this.nbrActionLeft = 30;
+        //this.nbrActionLeft = 30;
         this.self = new Player("W41K32");
         this.opponent = new Player(null);
     }
@@ -54,4 +54,44 @@ public class Board {
         this.opponent = opponent;
     }
     
+    @Override
+    public String toString() {
+        String string = ""
+                + "Board :\n"
+                + "Statut : "+this.status+"\n"
+                + "Nombre d'actions restantes : "+this.nbrActionLeft+"\n"
+                + "Nous :\n"
+                + this.self.toString()+"\n"
+                + "Adversaire :\n"
+                + this.opponent.toString();
+        return string;
+    }
+    
+    public void player1(String name,int health, int bullet, int shield, boolean focused) {
+        if (this.self.getName().equals(name)) {
+            this.self.setHealth(health);
+            this.self.setBullet(bullet);
+            this.self.setShield(shield);
+            this.self.setFocused(focused);
+        } else {
+            this.opponent.setHealth(health);
+            this.opponent.setBullet(bullet);
+            this.opponent.setShield(shield);
+            this.opponent.setFocused(focused);
+        }
+    }
+    
+    public void player2(String name,int health, int bullet, int shield, boolean focused) {
+        if (this.self.getName().equals(name)) {
+            this.self.setHealth(health);
+            this.self.setBullet(bullet);
+            this.self.setShield(shield);
+            this.self.setFocused(focused);
+        } else {
+            this.opponent.setHealth(health);
+            this.opponent.setBullet(bullet);
+            this.opponent.setShield(shield);
+            this.opponent.setFocused(focused);
+        }
+    }
 }

@@ -18,6 +18,7 @@ public class W41K32 {
     public static void main(String[] args) throws Exception {
         
         Bot bot = new Bot("test","test");
+        bot.run();
         
     }
     

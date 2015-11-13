@@ -34,6 +34,22 @@ public class Bot {
 >>>>>>> Stashed changes
     }
 
+    public String getIdEquipe() {
+        return idEquipe;
+    }
+
+    public void setIdEquipe(String idEquipe) {
+        this.idEquipe = idEquipe;
+    }
+
+    public String getIdPartie() {
+        return idPartie;
+    }
+
+    public void setIdPartie(String idPartie) {
+        this.idPartie = idPartie;
+    }
+
     public Board getBoard() {
         return board;
     }
@@ -118,4 +134,10 @@ public class Bot {
     */
 >>>>>>> Stashed changes
     
+    public void run() throws Exception {
+        this.practice(1);
+        this.updateOpponentName();
+        this.updateBoard();
+        System.out.println(this.board.toString());
+    }
 }
