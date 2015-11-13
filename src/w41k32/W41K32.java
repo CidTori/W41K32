@@ -17,7 +17,12 @@ public class W41K32 {
      */
     public static void main(String[] args) throws Exception {
         
+<<<<<<< HEAD
         Bot bot = new Bot("test","test", true, 1);
+=======
+        Bot bot = new Bot("test","test");
+        bot.run();
+>>>>>>> origin/master
         
     }
     

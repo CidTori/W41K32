@@ -20,10 +20,10 @@ public class Player {
 
     public Player(String name) {
         this.name = name;
-        this.health = 10;
-        this.bullet = 0;
-        this.shield = 7;
-        this.focused = false;
+        //this.health = 10;
+        //this.bullet = 0;
+        //this.shield = 7;
+        //this.focused = false;
     }
 
     public String getName() {
@@ -74,4 +74,16 @@ public class Player {
         this.lastMove = lastMove;
     }
     
+    @Override
+    public String toString() {
+        String string = ""
+                + "Player :\n"
+                + "Nom : "+this.name+"\n"
+                + "Vies : "+this.health+"\n"
+                + "Balles : "+this.bullet+"\n"
+                + "Boucliers : "+this.shield+"\n"
+                + "Vise : "+this.focused+"\n"
+                + "Dernier coup : "+this.lastMove;
+        return string;
+    }
 }
