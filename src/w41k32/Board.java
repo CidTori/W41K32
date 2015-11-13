@@ -74,6 +74,7 @@ public class Board {
             this.self.setShield(shield);
             this.self.setFocused(focused);
         } else {
+            this.opponent.setName(name);
             this.opponent.setHealth(health);
             this.opponent.setBullet(bullet);
             this.opponent.setShield(shield);
@@ -88,6 +89,7 @@ public class Board {
             this.self.setShield(shield);
             this.self.setFocused(focused);
         } else {
+            this.opponent.setName(name);
             this.opponent.setHealth(health);
             this.opponent.setBullet(bullet);
             this.opponent.setShield(shield);
