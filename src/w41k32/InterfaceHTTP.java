@@ -21,7 +21,7 @@ public class InterfaceHTTP {
     private String idPartie;
     private int level;
 
-    public InterfaceHTTP(boolean practice, int level, String nomEquipe, String motDePasse) throws Exception {
+    public InterfaceHTTP(String nomEquipe, String motDePasse, boolean practice, int level) throws Exception {
         this.nomEquipe = nomEquipe;
         this.motDePasse = motDePasse;
         this.level = level;

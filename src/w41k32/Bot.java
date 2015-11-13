@@ -5,8 +5,6 @@
  */
 package w41k32;
 
-import com.google.gson.Gson;
-
 /**
  *
  * @author Cédric
@@ -19,19 +17,15 @@ public class Bot {
     private String idPartie;
     private int level;
     private Board board;
+    private InterfaceHTTP http;
 
-    public Bot(String nomEquipe, String motDePasse) throws Exception {
+    public Bot(String nomEquipe, String motDePasse, boolean practice, int level) throws Exception {
         this.nomEquipe = nomEquipe;
         this.motDePasse = motDePasse;
         this.connection();
         this.board = new Board();
-<<<<<<< Updated upstream
-=======
-        this.nomEquipe = "test";
-        this.motDePasse = "test";
-        this.level = 1;
-        this.http = new InterfaceHTTP(true, level, nomEquipe, motDePasse);
->>>>>>> Stashed changes
+        this.http = new InterfaceHTTP(nomEquipe, motDePasse, practice, level);
+
     }
 
     public Board getBoard() {
@@ -49,7 +43,6 @@ public class Bot {
     private void connection() throws Exception {
         this.idEquipe = InterfaceHTTP2.player_getIdEquipe(this.nomEquipe,this.motDePasse);
     }
-<<<<<<< Updated upstream
     
     private void versus() throws Exception {
         String idPartie = InterfaceHTTP2.versus_next(this.idEquipe);
@@ -58,11 +51,12 @@ public class Bot {
             idPartie = InterfaceHTTP2.versus_next(this.idEquipe);
         }
         this.idPartie = idPartie;
-=======
+    }
+    
+        
     /*
     private boolean ping() {
         return this.http.ping().equals("pong");
->>>>>>> Stashed changes
     }
     
     private void practice(int level) throws Exception {
@@ -88,7 +82,6 @@ public class Bot {
         }
     }
     
-<<<<<<< Updated upstream
     private void updateOpponentLastMove() throws Exception {
         String lastMove = InterfaceHTTP2.game_getLastMove(this.idPartie,this.idEquipe);
         this.board.getOpponent().setLastMove(lastMove);
@@ -114,8 +107,5 @@ public class Bot {
         String opponentName = InterfaceHTTP2.game_opponent(this.idPartie,this.idEquipe);
         this.board.getOpponent().setName(opponentName);
     }
-=======
     */
->>>>>>> Stashed changes
-    
 }
