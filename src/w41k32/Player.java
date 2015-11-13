@@ -16,6 +16,7 @@ public class Player {
     private int bullet;
     private int shield;
     private boolean focused;
+    private String lastMove;
 
     public Player(String name) {
         this.name = name;
@@ -63,6 +64,14 @@ public class Player {
 
     public void setFocused(boolean focused) {
         this.focused = focused;
+    }
+
+    public String getLastMove() {
+        return lastMove;
+    }
+
+    public void setLastMove(String lastMove) {
+        this.lastMove = lastMove;
     }
     
 }

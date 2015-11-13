@@ -5,6 +5,8 @@
  */
 package w41k32;
 
+import com.google.gson.Gson;
+
 /**
  *
  * @author Cédric
@@ -16,11 +18,12 @@ public class Bot {
     private String idEquipe;
     private String idPartie;
     private Board board;
-    private InterfaceHTTP http;
 
-    public Bot() throws Exception {
+    public Bot(String nomEquipe, String motDePasse) throws Exception {
+        this.nomEquipe = nomEquipe;
+        this.motDePasse = motDePasse;
+        this.connection();
         this.board = new Board();
-        this.http = new InterfaceHTTP(true);
     }
 
     public Board getBoard() {
@@ -31,30 +34,70 @@ public class Bot {
         this.board = board;
     }
 
-    public InterfaceHTTP getHttp() {
-        return http;
-    }
-
-    public void setHttp(InterfaceHTTP http) {
-        this.http = http;
+    private boolean ping() throws Exception {
+        return InterfaceHTTP2.ping().equals("pong");
     }
     
-    private boolean ping() {
-        return this.http.ping().equals("pong");
+    private void connection() throws Exception {
+        this.idEquipe = InterfaceHTTP2.player_getIdEquipe(this.nomEquipe,this.motDePasse);
     }
     
-    private void connection() {
-        this.idEquipe = this.http.player_getIdEquipe(this.nomEquipe,this.motDePasse);
+    private void versus() throws Exception {
+        String idPartie = InterfaceHTTP2.versus_next(this.idEquipe);
+        while (idPartie.equals("NA")) {
+            Thread.sleep(1000);
+            idPartie = InterfaceHTTP2.versus_next(this.idEquipe);
+        }
+        this.idPartie = idPartie;
     }
     
-    private void versus() {
-        this.idPartie = this.http.versus_next(this.idEquipe);
+    private void practice(int level) throws Exception {
+        String idPartie = InterfaceHTTP2.practice_new(Integer.toString(level),this.idEquipe);
+        while (idPartie.equals("NA")) {
+            Thread.sleep(1000);
+            idPartie = InterfaceHTTP2.versus_next(this.idEquipe);
+        }
+        this.idPartie = idPartie;
     }
     
-    private void practice(int level) {
-        this.idPartie = this.http.practice_new(level,this.idEquipe);
+    private void updateStatus() throws Exception {
+        String status = InterfaceHTTP2.game_status(this.idPartie,this.idEquipe);
+        this.board.setStatus(status);
     }
     
+    private void updateBoard() throws Exception {
+        String format = "JSON";
+        String board = InterfaceHTTP2.game_board(this.idPartie, format);
+        if (format.equals("JSON")) {
+            Gson gson = new Gson(); // Or use new GsonBuilder().create();
+            this.board = gson.fromJson(board, Board.class); // deserializes json into target2
+        }
+    }
     
+    private void updateOpponentLastMove() throws Exception {
+        String lastMove = InterfaceHTTP2.game_getLastMove(this.idPartie,this.idEquipe);
+        this.board.getOpponent().setLastMove(lastMove);
+    }
+    
+    private void reload() throws Exception {
+        String answer = InterfaceHTTP2.game_play(this.idPartie,this.idEquipe,"RELOAD");
+        switch (answer) {
+            case "OK" :
+                break;
+            case "FORBIDDEN" :
+                break;
+            case "NOTYET" :
+                break;
+            case "GAMEOVER" :
+                break;
+            default :
+                
+        }
+    }
+    
+    private void updateOpponentName() throws Exception {
+        String opponentName = InterfaceHTTP2.game_opponent(this.idPartie,this.idEquipe);
+        this.board.getOpponent().setName(opponentName);
+    }
     
 }

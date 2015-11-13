@@ -11,6 +11,7 @@ package w41k32;
  */
 public class Board {
     
+    private String status;
     private int nbrActionLeft;
     private Player self;
     private Player opponent;
@@ -19,6 +20,14 @@ public class Board {
         this.nbrActionLeft = 30;
         this.self = new Player("W41K32");
         this.opponent = new Player(null);
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public int getNbrActionLeft() {
