@@ -11,23 +11,13 @@ package w41k32;
  */
 public class Board {
     
-    private String status;
     private int nbrActionLeft;
     private Player self;
     private Player opponent;
 
-    public Board() {
-        //this.nbrActionLeft = 30;
-        this.self = new Player("W41K32");
-        this.opponent = new Player(null);
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
+    public Board(String selfName,String opponentName) {
+        this.self = new Player(selfName);
+        this.opponent = new Player(opponentName);
     }
 
     public int getNbrActionLeft() {
@@ -36,6 +26,7 @@ public class Board {
 
     public void setNbrActionLeft(int nbrActionLeft) {
         this.nbrActionLeft = nbrActionLeft;
+        System.out.println("Il reste "+this.nbrActionLeft+" actions.");
     }
 
     public Player getSelf() {
@@ -57,8 +48,6 @@ public class Board {
     @Override
     public String toString() {
         String string = ""
-                + "Board :\n"
-                + "Statut : "+this.status+"\n"
                 + "Nombre d'actions restantes : "+this.nbrActionLeft+"\n"
                 + "Nous :\n"
                 + this.self.toString()+"\n"
@@ -67,33 +56,4 @@ public class Board {
         return string;
     }
     
-    public void player1(String name,int health, int bullet, int shield, boolean focused) {
-        if (this.self.getName().equals(name)) {
-            this.self.setHealth(health);
-            this.self.setBullet(bullet);
-            this.self.setShield(shield);
-            this.self.setFocused(focused);
-        } else {
-            this.opponent.setName(name);
-            this.opponent.setHealth(health);
-            this.opponent.setBullet(bullet);
-            this.opponent.setShield(shield);
-            this.opponent.setFocused(focused);
-        }
-    }
-    
-    public void player2(String name,int health, int bullet, int shield, boolean focused) {
-        if (this.self.getName().equals(name)) {
-            this.self.setHealth(health);
-            this.self.setBullet(bullet);
-            this.self.setShield(shield);
-            this.self.setFocused(focused);
-        } else {
-            this.opponent.setName(name);
-            this.opponent.setHealth(health);
-            this.opponent.setBullet(bullet);
-            this.opponent.setShield(shield);
-            this.opponent.setFocused(focused);
-        }
-    }
 }

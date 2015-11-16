@@ -19,12 +19,14 @@ public class Bot {
     private String idPartie;
     private int level;
     private Board board;
+    private String status;
+    private String answer;
+    private String move;
 
     public Bot(String nomEquipe, String motDePasse) throws Exception {
         this.nomEquipe = nomEquipe;
         this.motDePasse = motDePasse;
         this.connection();
-        this.board = new Board();
     }
 
     public String getIdEquipe() {
@@ -51,76 +53,162 @@ public class Bot {
         this.board = board;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     private boolean ping() throws Exception {
         return InterfaceHTTP2.ping().equals("pong");
     }
     
-    private void connection() throws Exception {
+    private void connection() throws Exception { // getIdEquipe
         this.idEquipe = InterfaceHTTP2.player_getIdEquipe(this.nomEquipe,this.motDePasse);
     }
     
-    private void versus() throws Exception {
+    private void beginVersus() throws Exception { // nextGame()
         String idPartie = InterfaceHTTP2.versus_next(this.idEquipe);
         while (idPartie.equals("NA")) {
             Thread.sleep(1000);
             idPartie = InterfaceHTTP2.versus_next(this.idEquipe);
         }
         this.idPartie = idPartie;
+        this.board = new Board(this.nomEquipe,this.getOpponentName());
+        this.updateBoard();
     }
     
-    private void practice(int level) throws Exception {
+    private void beginPractice(int level) throws Exception { // newGame()
         String idPartie = InterfaceHTTP2.practice_new(Integer.toString(level),this.idEquipe);
         while (idPartie.equals("NA")) {
             Thread.sleep(1000);
             idPartie = InterfaceHTTP2.versus_next(this.idEquipe);
         }
         this.idPartie = idPartie;
+        this.board = new Board(this.nomEquipe,this.getOpponentName());
+        this.updateBoard();
     }
     
-    private void updateStatus() throws Exception {
+    private void updateStatus() throws Exception { // getStatus()
         String status = InterfaceHTTP2.game_status(this.idPartie,this.idEquipe);
-        this.board.setStatus(status);
+        this.status = status;
     }
     
-    private void updateBoard() throws Exception {
+    private void endGame() {
+        
+    }
+    
+    private void updateBoard() throws Exception { // getBoard()
         String format = "JSON";
-        String board = InterfaceHTTP2.game_board(this.idPartie, format);
-        if (format.equals("JSON")) {
-            Gson gson = new Gson(); // Or use new GsonBuilder().create();
-            this.board = gson.fromJson(board, Board.class); // deserializes json into target2
-        }
+        String game_board = InterfaceHTTP2.game_board(this.idPartie, format);
+        game_board = game_board.replaceAll("(\")(player[12])(\":\\{\"name\":\""+this.board.getSelf().getName()+"\")","$1self$3");
+        game_board = game_board.replaceAll("(\")(player[12])(\":\\{\"name\":\""+this.board.getOpponent().getName()+"\")","$1opponent$3");
+        
+        Gson gson = new Gson(); // Or use new GsonBuilder().create();
+        Board board = gson.fromJson(game_board, Board.class); // deserializes json into target2
+        
+        this.board.setNbrActionLeft(board.getNbrActionLeft());
+        
+        this.board.getSelf().setHealth(board.getSelf().getHealth());
+        this.board.getSelf().setBullet(board.getSelf().getBullet());
+        this.board.getSelf().setShield(board.getSelf().getShield());
+        this.board.getSelf().setFocused(board.getSelf().isFocused());
+        this.board.getSelf().setLastMove(this.move);
+        
+        this.board.getOpponent().setHealth(board.getOpponent().getHealth());
+        this.board.getOpponent().setBullet(board.getOpponent().getBullet());
+        this.board.getOpponent().setShield(board.getOpponent().getShield());
+        this.board.getOpponent().setFocused(board.getOpponent().isFocused());
+        this.board.getOpponent().setLastMove(InterfaceHTTP2.game_getLastMove(this.idPartie,this.idEquipe));
     }
     
-    private void updateOpponentLastMove() throws Exception {
-        String lastMove = InterfaceHTTP2.game_getLastMove(this.idPartie,this.idEquipe);
-        this.board.getOpponent().setLastMove(lastMove);
+    private void makeMove(String move) throws Exception {
+        this.answer = InterfaceHTTP2.game_play(this.idPartie,this.idEquipe,move);
+        this.move = move;
     }
     
     private void reload() throws Exception {
-        String answer = InterfaceHTTP2.game_play(this.idPartie,this.idEquipe,"RELOAD");
-        switch (answer) {
-            case "OK" :
-                break;
-            case "FORBIDDEN" :
-                break;
-            case "NOTYET" :
-                break;
-            case "GAMEOVER" :
-                break;
-            default :
-                
+        this.makeMove("RELOAD");
+        System.out.println("Je recharge.");
+    }
+    
+    private void cover() throws Exception {
+        this.makeMove("COVER");
+        System.out.println("Je me met à couvert.");
+    }
+    
+    private void aim() throws Exception {
+        this.makeMove("AIM");
+        System.out.println("Je vise.");
+    }
+    
+    private void shoot() throws Exception {
+        this.makeMove("SHOOT");
+        System.out.println("Je tire.");
+    }
+    
+    private String getOpponentName() throws Exception {
+        return InterfaceHTTP2.game_opponent(this.idPartie,this.idEquipe);
+    }
+    
+    public void play() throws Exception {
+        if (this.board.getSelf().getBullet()==0) {
+            System.out.println("Plus de balles dans le chargeur !");
+            reload();
+        } else {
+            shoot();
         }
     }
     
-    private void updateOpponentName() throws Exception {
-        String opponentName = InterfaceHTTP2.game_opponent(this.idPartie,this.idEquipe);
-        this.board.getOpponent().setName(opponentName);
-    }
-    
-    public void run() throws Exception {
-        this.practice(1);
-        this.updateOpponentName();
-        this.updateBoard();
-        System.out.println(this.board.toString());
+    public void practice(int level) throws Exception {
+        this.beginPractice(level);
+        game_loop:
+        while (true) {
+            //System.out.println(this.board.toString());
+            this.updateStatus();
+            while (this.status.equals("CANTPLAY")) {
+                Thread.sleep(1000);
+                this.updateStatus();
+            }
+            this.updateBoard();
+            System.out.println(this.board.toString());
+            switch (this.status) {
+                case "VICTORY" :
+                    System.out.println("Victoire !");
+                    //this.endGame();
+                    break game_loop;
+                case "DEFEAT" :
+                    System.out.println("Défaite...");
+                    //this.endGame();
+                    break game_loop;
+                case "CANCELLED" :
+                    System.err.println("Partie annulée !");
+                    //this.endGame();
+                    break game_loop;
+                case "CANPLAY" :
+                    this.play();
+                    switch (this.answer) {
+                        case "FORBIDDEN" :
+                            System.err.println("Ce coup est interdit !");
+                            break;
+                        case "NOTYET" :
+                            System.err.println("Ce n'est pas encore mon tour !");
+                            break;
+                        case "GAMEOVER" :
+                            System.err.println("La partie est terminé !");
+                            break;
+                        case "OK" :
+                            System.out.println("Ce coup est accepté.");
+                            break;
+                        default :
+                            System.err.println("Réponse non prévue !");
+                    }
+                    break;
+                default :
+                    System.err.println("Statut non prévu !");
+            }
+        }
     }
 }
